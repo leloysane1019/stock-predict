@@ -5,3 +5,4 @@ yfinance
 numpy
 scikit-learn
 jinja2
+python-multipart
