@@ -19,6 +19,12 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # 学習済みモデルの読み込み
 model_path = os.path.join(os.path.dirname(__file__), "stock_prediction_model_ja.keras")
+import os
+
+
+
+model_path = os.path.join(os.path.dirname(__file__), "stock_prediction_model_ja.keras")
+
 model = tf.keras.models.load_model(model_path)
 
 @app.get("/", response_class=HTMLResponse)
