@@ -31,12 +31,17 @@ model = tf.keras.models.load_model(model_path)
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+from datetime import datetime
+
 @app.post("/predict/", response_class=HTMLResponse)
 async def predict(request: Request, code: str = Form(...)):
     try:
-        # 株価データの取得
-        data = yf.download(code, start='2010-01-01', end='2023-01-01')
-       
+        # 今日の日付を取得
+        today = datetime.today().strftime('%Y-%m-%d')
+
+        # 株価データの取得（最新データまで）
+        data = yf.download(code, start='2010-01-01', end=today)
+
         # データが取得できなかった場合のエラーハンドリング
         if data.empty:
             return templates.TemplateResponse("index.html", {"request": request, "error": "株価データが取得できませんでした"})
