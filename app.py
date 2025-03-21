@@ -35,15 +35,15 @@ async def predict(request: Request, code: str = Form(...)):
         scaler = MinMaxScaler(feature_range=(0, 1))
         scaled_data = scaler.fit_transform(close_prices)
 
-        # 直近60日間のデータで予測
-        X_test = [scaled_data[-60:, 0]]
-        X_test = np.array(X_test).reshape((1, 60, 1))
+        # 直近180日間のデータで予測
+        X_test = [scaled_data[-180:, 0]]
+        X_test = np.array(X_test).reshape((1, 180, 1))
         predicted_price = model.predict(X_test)
         predicted_price = scaler.inverse_transform(predicted_price)[0][0]
 
-        # グラフ作成
+        # グラフ作成（過去180日間に修正）
         fig, ax = plt.subplots()
-        ax.plot(close_prices[-60:].index, close_prices[-60:].values, label='過去60日終値')
+        ax.plot(close_prices[-180:].index, close_prices[-180:].values, label='過去180日終値')  # ← ここ修正
         ax.axhline(predicted_price, color='r', linestyle='--', label='予測価格')
         ax.set_title(f"{code} 株価予測")
         ax.legend()
