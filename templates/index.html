@@ -1,21 +1,25 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>株価予測ツール</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+    <meta charset="UTF-8">
 </head>
 <body>
-    <h2>株価予測ツール</h2>
+    <h1>株価予測</h1>
     <form action="/predict/" method="post">
-        <label for="code">企業コードを入力（例：7203.T）:</label>
+        <label for="code">企業コード (例: 7203.T):</label>
         <input type="text" id="code" name="code" required>
-        <button type="submit">予測する</button>
+        <button type="submit">予測</button>
     </form>
 
     {% if predicted_price %}
-        <h3>予測株価: {{ predicted_price }}</h3>
+        <h2>予測された株価: {{ predicted_price | round(2) }} 円</h2>
+        <h3>過去60日間と予測価格のグラフ</h3>
+        <img src="data:image/png;base64,{{ graph }}" alt="予測グラフ">
+    {% endif %}
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
     {% endif %}
 </body>
 </html>
